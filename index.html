@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Time-Incremental Continued Pretraining of LLMs - Öncel, Ali, Ravanelli, Subakan, Yildiz">
+  <meta name="description" content="Continued pretraining on post-cutoff web data reliably updates LLM knowledge across six models and three families, with no catastrophic forgetting and near-zero cost to general capabilities.">
+  <meta name="keywords" content="continued pretraining, catastrophic forgetting, temporal knowledge, large language models, continual learning, knowledge cutoff, LoRA, Daily Oracle, FineWeb-Edu">
+  <meta name="author" content="Firat Öncel, Salman Hussain Ali, Mirco Ravanelli, Cem Subakan, Çağatay Yildiz">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Time-Incremental CPT">
+  <meta property="og:title" content="Time-Incremental Continued Pretraining of LLMs">
+  <meta property="og:description" content="Continued pretraining on post-cutoff web data reliably updates LLM knowledge across six models and three families, with no catastrophic forgetting and near-zero cost to general capabilities.">
+  <meta property="og:url" content="https://example.com/time-incremental-cpt">
+  <meta property="og:image" content="https://example.com/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Time-Incremental Continued Pretraining of LLMs - Research Preview">
+  <meta property="article:author" content="Firat Öncel">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="continued pretraining">
+  <meta property="article:tag" content="catastrophic forgetting">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Time-Incremental Continued Pretraining of LLMs">
+  <meta name="twitter:description" content="Continued pretraining on post-cutoff web data reliably updates LLM knowledge across six models and three families, with no catastrophic forgetting and near-zero cost to general capabilities.">
+  <meta name="twitter:image" content="https://example.com/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="Time-Incremental Continued Pretraining of LLMs - Research Preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="Time-Incremental Continued Pretraining of LLMs: Knowledge Updates Without Catastrophic Forgetting">
+  <meta name="citation_author" content="Öncel, Firat">
+  <meta name="citation_author" content="Ali, Salman Hussain">
+  <meta name="citation_author" content="Ravanelli, Mirco">
+  <meta name="citation_author" content="Subakan, Cem">
+  <meta name="citation_author" content="Yildiz, Çağatay">
+  <meta name="citation_publication_date" content="2027">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>Time-Incremental Continued Pretraining of LLMs | Project Page</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS -->
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <noscript>
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  </noscript>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  <script defer src="static/js/tables.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Time-Incremental Continued Pretraining of LLMs: Knowledge Updates Without Catastrophic Forgetting",
+    "description": "We study time-incremental continued pretraining (CPT) of LLMs on web data drawn strictly from after each model's knowledge cutoff, across six open-weight models spanning three architectural families, and find reliable knowledge updates without catastrophic forgetting.",
+    "author": [
+      {"@type": "Person", "name": "Firat Öncel"},
+      {"@type": "Person", "name": "Salman Hussain Ali"},
+      {"@type": "Person", "name": "Mirco Ravanelli"},
+      {"@type": "Person", "name": "Cem Subakan"},
+      {"@type": "Person", "name": "Cagatay Yildiz"}
+    ],
+    "keywords": ["continued pretraining", "catastrophic forgetting", "temporal knowledge", "large language models", "continual learning", "LoRA"],
+    "isAccessibleForFree": true
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <nav class="site-nav" aria-label="Section navigation">
+    <div class="site-nav-inner">
+      <a href="#abstract">Abstract</a>
+      <a href="#findings">Findings</a>
+      <a href="#knowledge">Knowledge Acquisition</a>
+      <a href="#cost">Cost</a>
+      <a href="#recipe">Recipe</a>
+      <a href="#deployment">Deployment</a>
+      <a href="#related-work">Related Work</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </nav>
+
+  <main id="main-content">
+  <section class="hero publication-header">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Time-Incremental Continued Pretraining of LLMs: Knowledge Updates Without Catastrophic Forgetting</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Firat Öncel,</span>
+              <span class="author-block">Salman Hussain Ali,</span>
+              <span class="author-block">Mirco Ravanelli,</span>
+              <span class="author-block">Cem Subakan,</span>
+              <span class="author-block">Cagatay Yildiz</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Abstract -->
+  <section class="section hero is-light" id="abstract">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Large language models (LLMs) drift out of date the moment their pretraining ends, yet retraining from scratch is prohibitively expensive. Continued pretraining (CPT) is the natural remedy, but it is typically evaluated through a continual learning lens that assumes disjoint data streams. This is a poor fit for time-incremental updates on web-scale crawls, where successive snapshots share substantial URL overlap by design. We study time-incremental CPT in this realistic regime: continued pretraining on FineWeb-Edu dumps drawn strictly from after each model's knowledge cutoff, evaluated across six open-weight models spanning three families (OLMo2, Llama-3.1/3.2, Gemma-3-1B) and four parameter scales (1B&ndash;3B&ndash;7B&ndash;8B).
+            </p>
+            <!-- <p>
+              We organize our findings around four practical questions. <strong>(i) Is knowledge acquired?</strong> Yes, but heterogeneously, and without catastrophic forgetting: five of six models also improve on pre-cutoff factual recall, and the gains track pretraining saturation (driven primarily by token budget per parameter). <strong>(ii) What does it cost?</strong> Almost nothing &mdash; macro-average accuracy across a thirteen-task suite stays within 0.01 of the base for every model. <strong>(iii) What is the recipe?</strong> Data quality dominates quantity (a curated 6B-token slice matches a 40B broader one); the optima for knowledge acquisition and general capability are separated by roughly an order of magnitude in learning rate; and LoRA at sufficient rank matches full CPT. <strong>(iv) Does it survive deployment?</strong> CPT gains transfer through SFT, while DPO's effect is family-dependent. Together, these results paint a more optimistic picture of time-incremental CPT than the prior continual learning literature suggests.
+            </p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End abstract -->
+
+
+  <!-- Key findings -->
+  <section class="section" id="findings">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Four Practical Questions</h2>
+      <p class="section-intro">We organize our findings around the questions a practitioner would actually ask before deploying continued pretraining to keep a model temporally aligned.</p>
+      <div class="findings-grid">
+        <div class="finding-card">
+          <div class="finding-icon"><i class="fas fa-brain"></i></div>
+          <h3>Is knowledge acquired?</h3>
+          <p>Yes, but <span class="finding-stat">heterogeneously</span> across families &mdash; OLMo2 and Gemma-3-1B absorb substantial new knowledge, Llama gains are limited &mdash; and <strong>without catastrophic forgetting</strong>: 5 of 6 models also improve on before-cutoff recall.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon"><i class="fas fa-coins"></i></div>
+          <h3>What does it cost?</h3>
+          <p>Almost nothing. Macro-average accuracy across <strong>13 downstream tasks</strong> stays within <span class="finding-stat">0.01</span> of the base model for every one of the six models tested.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon"><i class="fas fa-flask"></i></div>
+          <h3>What is the recipe?</h3>
+          <p><strong>Quality beats quantity</strong> (6B curated tokens &asymp; 40B broad tokens); knowledge and capability peak at learning rates roughly <span class="finding-stat">10&times;</span> apart; LoRA at sufficient rank matches full CPT.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon"><i class="fas fa-rocket"></i></div>
+          <h3>Does it survive deployment?</h3>
+          <p>CPT gains <strong>transfer robustly through SFT</strong>. DPO's effect is family-dependent: it helps OLMo2-7B but slightly erodes Llama-3.1-8B, echoing the alignment-tax phenomenon.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End key findings -->
+
+
+  <!-- Method summary -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Setup at a Glance</h2>
+      <table class="summary-table">
+        <tbody>
+          <tr>
+            <td>Models</td>
+            <td>OLMo2-1B, OLMo2-7B, Llama-3.2-1B, Llama-3.2-3B, Llama-3.1-8B, Gemma-3-1B</td>
+          </tr>
+          <tr>
+            <td>Pretraining data</td>
+            <td>FineWeb-Edu, score &ge; 4 (6B tokens) and score &ge; 3.5 (40B tokens)</td>
+          </tr>
+          <tr>
+            <td>Data window</td>
+            <td>Post-cutoff Common Crawl dumps (week 10/2024&ndash;week 26/2025; shifted to mid-August 2024 for Gemma-3-1B)</td>
+          </tr>
+          <tr>
+            <td>Evaluation set</td>
+            <td>Daily Oracle (True/False &amp; Multiple Choice, before/after cutoff)</td>
+          </tr>
+          <tr>
+            <td>Downstream tasks</td>
+            <td>PIQA, HellaSwag, WinoGrande, OpenBookQA, BoolQ, SciQ, ARC-Easy, ARC-Challenge, COPA, CommonsenseQA, SocialIQA, Basic Arithmetic, MMLU</td>
+          </tr>
+          <tr>
+            <td>Learning rates</td>
+            <td>2&ndash;9 rates per model; linear warmup (500 steps), linear decay to 0.1&times; peak</td>
+          </tr>
+          <tr>
+            <td>Post-training</td>
+            <td>Tulu 3 dataset (SFT and DPO)</td>
+          </tr>
+          <tr>
+            <td>Hardware</td>
+            <td>Single node, 8&times;H200 GPUs</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <!-- End method summary -->
+
+
+  <!-- Knowledge acquisition -->
+  <section class="section" id="knowledge">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Heterogeneous Knowledge Acquisition, No Catastrophic Forgetting</h2>
+
+      <div class="figure-block">
+        <div class="figure-row">
+          <div>
+            <img src="static/images/paper/main-avg-after-f1-macro.png" alt="Macro-F1 on after-cutoff Daily Oracle questions, base vs. best CPT, for all six models" loading="lazy">
+          </div>
+          <div>
+            <img src="static/images/paper/main-avg-before-f1-macro.png" alt="Macro-F1 on before-cutoff Daily Oracle questions, base vs. best CPT, for all six models" loading="lazy">
+          </div>
+        </div>
+        <p class="figure-caption"><strong>Figure 1.</strong> Macro-F1 on Daily Oracle questions split by each model's knowledge cutoff. <strong>Left:</strong> after-cutoff gains track the original token budget &mdash; OLMo2-7B and Gemma-3-1B absorb substantially more new knowledge than the more heavily pretrained Llama variants. <strong>Right:</strong> five of six models also improve on before-cutoff questions, reflecting Common Crawl's re-crawl overlap with the original pretraining distribution rather than catastrophic forgetting.</p>
+      </div>
+
+      <div class="content has-text-justified">
+        <p><strong>After-cutoff acquisition is heterogeneous.</strong> OLMo2-7B and Gemma-3-1B improve by +0.09 and +0.07 Macro-F1 respectively, while Llama-3.2-1B slightly regresses. This tracks the original pretraining-token budget (with Llama-3.1-8B as an exception): Gemma-3-1B at ~2T tokens, OLMo2 at ~4.2T, versus the more saturated Llama-3.2 family trained on up to 9T tokens. Plasticity tracks how far past compute-optimal a checkpoint was trained, not how much compute it consumed &mdash; a pattern consistent across three independent families.</p>
+        <p><strong>CPT does not cause forgetting, and improves pre-cutoff recall.</strong> F1 on questions already encoded at the original cutoff consistently <em>increases</em> after CPT (only Llama-3.2-1B regresses, by 0.01). This is attributed to the CPT data itself: FineWeb-Edu retains cross-snapshot duplicates by design, so post-cutoff pages implicitly replay pre-cutoff content during training. Tested at the population level, after-cutoff Macro-F1 improves for 5 of 6 models (mean +0.043, paired t-test p=0.031), and before-cutoff Macro-F1 also improves for 5 of 6 (mean +0.027, p=0.034).</p>
+        <p><strong>The advantage widens for more recent events</strong> and is preserved on questions whose source articles are not in the training corpus &mdash; evidence that gains reflect genuine knowledge acquisition rather than verbatim memorization.</p>
+      </div>
+
+      <div class="table-block">
+        <div class="table-toolbar">
+          <h4>Table 1 &middot; Daily Oracle results, base vs. best CPT (Macro-F1)</h4>
+          <input type="text" class="table-filter" data-filter-table="table-daily-oracle" placeholder="Filter by model&hellip;">
+        </div>
+        <div class="table-wrap">
+          <table class="sortable-table" id="table-daily-oracle">
+            <thead>
+              <tr>
+                <th data-type="text">Model</th>
+                <th data-type="text">Variant</th>
+                <th data-type="num">LR</th>
+                <th data-type="text">Data Score</th>
+                <th data-type="num">MC Before</th>
+                <th data-type="num">MC After</th>
+                <th data-type="num">TF Before</th>
+                <th data-type="num">TF After</th>
+                <th data-type="num">All Avg</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-base"><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="">&mdash;</td><td data-value="0.38">0.38</td><td data-value="0.35">0.35</td><td data-value="0.53">0.53</td><td data-value="0.50">0.50</td><td data-value="0.44">0.44</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.00003">3&times;10&#8315;&#8309;</td><td data-value="4.0">4.0</td><td data-value="0.37">0.37</td><td data-value="0.42">0.42</td><td data-value="0.63">0.63</td><td data-value="0.61">0.61</td><td data-value="0.51" class="best">0.51</td></tr>
+              <tr class="row-base"><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="">&mdash;</td><td data-value="0.55">0.55</td><td data-value="0.50">0.50</td><td data-value="0.74">0.74</td><td data-value="0.64">0.64</td><td data-value="0.61">0.61</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1&times;10&#8315;&#8310;</td><td data-value="4.0">4.0</td><td data-value="0.55">0.55</td><td data-value="0.50">0.50</td><td data-value="0.74">0.74</td><td data-value="0.67">0.67</td><td data-value="0.61" class="best">0.61</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1&times;10&#8315;&#8310;</td><td data-value="3.5">3.5</td><td data-value="0.55">0.55</td><td data-value="0.50">0.50</td><td data-value="0.74">0.74</td><td data-value="0.66">0.66</td><td data-value="0.61">0.61</td></tr>
+              <tr class="row-base"><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="">&mdash;</td><td data-value="0.36">0.36</td><td data-value="0.34">0.34</td><td data-value="0.60">0.60</td><td data-value="0.57">0.57</td><td data-value="0.47" class="best">0.47</td></tr>
+              <tr><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1&times;10&#8315;&#8310;</td><td data-value="4.0">4.0</td><td data-value="0.36">0.36</td><td data-value="0.34">0.34</td><td data-value="0.57">0.57</td><td data-value="0.54">0.54</td><td data-value="0.45">0.45</td></tr>
+              <tr class="row-base"><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="">&mdash;</td><td data-value="0.47">0.47</td><td data-value="0.45">0.45</td><td data-value="0.60">0.60</td><td data-value="0.54">0.54</td><td data-value="0.51">0.51</td></tr>
+              <tr><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="CPT">CPT</td><td data-value="0.000005">5&times;10&#8315;&#8310;</td><td data-value="4.0">4.0</td><td data-value="0.47">0.47</td><td data-value="0.49">0.49</td><td data-value="0.63">0.63</td><td data-value="0.57">0.57</td><td data-value="0.54" class="best">0.54</td></tr>
+              <tr class="row-base"><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="">&mdash;</td><td data-value="0.36">0.36</td><td data-value="0.35">0.35</td><td data-value="0.53">0.53</td><td data-value="0.50">0.50</td><td data-value="0.44">0.44</td></tr>
+              <tr><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1&times;10&#8315;&#8310;</td><td data-value="4.0">4.0</td><td data-value="0.39">0.39</td><td data-value="0.43">0.43</td><td data-value="0.60">0.60</td><td data-value="0.56">0.56</td><td data-value="0.50">0.50</td></tr>
+              <tr><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1&times;10&#8315;&#8310;</td><td data-value="3.5">3.5</td><td data-value="0.40">0.40</td><td data-value="0.45">0.45</td><td data-value="0.63">0.63</td><td data-value="0.59">0.59</td><td data-value="0.52" class="best">0.52</td></tr>
+              <tr class="row-base"><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="">&mdash;</td><td data-value="0.53">0.53</td><td data-value="0.49">0.49</td><td data-value="0.61">0.61</td><td data-value="0.53">0.53</td><td data-value="0.54">0.54</td></tr>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1&times;10&#8315;&#8310;</td><td data-value="4.0">4.0</td><td data-value="0.55">0.55</td><td data-value="0.56">0.56</td><td data-value="0.69">0.69</td><td data-value="0.65">0.65</td><td data-value="0.61" class="best">0.61</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3 class="title is-4">Sample-Level View: Acquisition and Forgetting Are Coupled</h3>
+      <div class="content has-text-justified">
+        <p>Average Macro-F1 can hide simultaneous forgetting and learning. Classifying each base&rarr;CPT transition as acquisition (wrong&rarr;right) or forgetting (right&rarr;wrong) shows forgetting is real at the sample level &mdash; even the most plastic models flip 9&ndash;16% of before-cutoff True/False answers they originally had right &mdash; but is outweighed by acquisition in most configurations. Pooling 191 (acquisition, forgetting) pairs across models, learning rates, data slices and LoRA ranks, the two rates are strongly correlated (Pearson r=0.68, p=1.3e&minus;27), with slope 0.60: roughly 0.6 previously-correct answers are lost per additional answer gained, and no configuration escapes the trade-off entirely.</p>
+      </div>
+
+      <div class="figure-block">
+        <div style="max-width: 420px; margin: 0 auto;">
+          <img src="static/images/paper/coupling.png" alt="Scatter plot of acquisition vs forgetting across all trained checkpoints" loading="lazy">
+        </div>
+        <p class="figure-caption" style="text-align: center; max-width: 420px; margin-left: auto; margin-right: auto;">Every trained checkpoint (spanning models, learning rates, data slices and LoRA ranks) hugs the diagonal; points below it are net-positive.</p>
+
+        <div style="margin-top: 2rem;">
+          <img src="static/images/paper/acq-forg-total-grid.png" alt="Total acquisition and forgetting as a function of peak learning rate, for five models" loading="lazy">
+        </div>
+        <p class="figure-caption">Total acquisition and forgetting rise together with the learning rate; the useful <em>net</em> is maximized at intermediate rates.</p>
+      </div>
+
+      <div class="table-block">
+        <div class="table-toolbar">
+          <h4>Table 2 &middot; Sample-level transitions, base &rarr; best CPT (% of questions in split)</h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
+            <div class="table-toggle" data-toggle-table="table-flips" data-toggle-col="1">
+              <button type="button" class="toggle-btn is-active" data-toggle-value="">All</button>
+              <button type="button" class="toggle-btn" data-toggle-value="TF">True/False</button>
+              <button type="button" class="toggle-btn" data-toggle-value="MC">Multiple Choice</button>
+            </div>
+            <input type="text" class="table-filter" data-filter-table="table-flips" placeholder="Filter by model&hellip;">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="sortable-table has-group-header" id="table-flips">
+            <thead>
+              <tr>
+                <th data-type="text" rowspan="2">Model</th>
+                <th data-type="text" rowspan="2">Format</th>
+                <th colspan="3" class="group-header group-divider">Before-cutoff</th>
+                <th colspan="3" class="group-header group-divider">After-cutoff</th>
+              </tr>
+              <tr>
+                <th data-type="num" title="Acquisition, before-cutoff split" class="group-divider">Acq (%)</th>
+                <th data-type="num" title="Forgetting, before-cutoff split">Forg (%)</th>
+                <th data-type="num" title="Net, before-cutoff split">Net (%)</th>
+                <th data-type="num" title="Acquisition, after-cutoff split" class="group-divider">Acq (%)</th>
+                <th data-type="num" title="Forgetting, after-cutoff split">Forg (%)</th>
+                <th data-type="num" title="Net, after-cutoff split">Net (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="TF">TF</td><td class="group-divider" data-value="26.0">26.0</td><td data-value="9.3">9.3</td><td data-value="16.7">+16.7</td><td class="group-divider" data-value="25.3">25.3</td><td data-value="13.1">13.1</td><td data-value="12.2">+12.2</td></tr>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="MC">MC</td><td class="group-divider" data-value="7.8">7.8</td><td data-value="5.7">5.7</td><td data-value="2.0">+2.0</td><td class="group-divider" data-value="11.8">11.8</td><td data-value="6.0">6.0</td><td data-value="5.8">+5.8</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="TF">TF</td><td class="group-divider" data-value="20.7">20.7</td><td data-value="13.1">13.1</td><td data-value="7.7">+7.7</td><td class="group-divider" data-value="20.6">20.6</td><td data-value="15.6">15.6</td><td data-value="5.1">+5.1</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="MC">MC</td><td class="group-divider" data-value="2.9">2.9</td><td data-value="4.0">4.0</td><td data-value="-1.0">&minus;1.0</td><td class="group-divider" data-value="6.2">6.2</td><td data-value="1.5">1.5</td><td data-value="4.7">+4.7</td></tr>
+              <tr><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="TF">TF</td><td class="group-divider" data-value="20.0">20.0</td><td data-value="12.3">12.3</td><td data-value="7.7">+7.7</td><td class="group-divider" data-value="21.5">21.5</td><td data-value="16.7">16.7</td><td data-value="4.8">+4.8</td></tr>
+              <tr><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="MC">MC</td><td class="group-divider" data-value="15.1">15.1</td><td data-value="11.7">11.7</td><td data-value="3.4">+3.4</td><td class="group-divider" data-value="11.3">11.3</td><td data-value="8.2">8.2</td><td data-value="3.2">+3.2</td></tr>
+              <tr><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="TF">TF</td><td class="group-divider" data-value="13.3">13.3</td><td data-value="10.4">10.4</td><td data-value="3.0">+3.0</td><td class="group-divider" data-value="18.1">18.1</td><td data-value="13.2">13.2</td><td data-value="4.9">+4.9</td></tr>
+              <tr><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="MC">MC</td><td class="group-divider" data-value="8.2">8.2</td><td data-value="10.8">10.8</td><td data-value="-2.6">&minus;2.6</td><td class="group-divider" data-value="8.8">8.8</td><td data-value="2.4">2.4</td><td data-value="6.4">+6.4</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="TF">TF</td><td class="group-divider" data-value="8.2">8.2</td><td data-value="8.5">8.5</td><td data-value="-0.3">&minus;0.3</td><td class="group-divider" data-value="16.0">16.0</td><td data-value="14.2">14.2</td><td data-value="1.9">+1.9</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="MC">MC</td><td class="group-divider" data-value="4.8">4.8</td><td data-value="3.7">3.7</td><td data-value="1.1">+1.1</td><td class="group-divider" data-value="5.2">5.2</td><td data-value="2.1">2.1</td><td data-value="3.1">+3.1</td></tr>
+              <tr><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="TF">TF</td><td class="group-divider" data-value="7.7">7.7</td><td data-value="10.2">10.2</td><td data-value="-2.5">&minus;2.5</td><td class="group-divider" data-value="10.7">10.7</td><td data-value="11.8">11.8</td><td data-value="-1.1">&minus;1.1</td></tr>
+              <tr><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="MC">MC</td><td class="group-divider" data-value="1.7">1.7</td><td data-value="1.6">1.6</td><td data-value="0.2">+0.2</td><td class="group-divider" data-value="2.3">2.3</td><td data-value="1.1">1.1</td><td data-value="1.2">+1.2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End knowledge acquisition -->
+
+
+  <!-- Cost / general capabilities -->
+  <section class="section hero is-light" id="cost">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">What Does CPT Cost? General Abilities Are Largely Preserved</h2>
+
+      <div class="figure-block">
+        <div class="figure-row">
+          <div>
+            <img src="static/images/paper/downstream-avg.png" alt="Macro-average accuracy across thirteen downstream tasks, base vs best CPT variant, for all six models" loading="lazy">
+          </div>
+          <div>
+            <img src="static/images/paper/commonsenseqa-only.png" alt="CommonsenseQA accuracy before and after CPT across models" loading="lazy">
+          </div>
+        </div>
+        <p class="figure-caption"><strong>Figure 2.</strong> General capabilities are preserved under CPT. <strong>Left:</strong> macro-average accuracy across thirteen downstream tasks for each base model (light) and its best CPT variant (hatched); every model lands within 0.01 of its base. <strong>Right:</strong> CommonsenseQA, the single benchmark on which any model loses more than 0.02, with the largest drops concentrated on the OLMo2 family, which improves the most on Daily Oracle.</p>
+      </div>
+
+      <div class="content has-text-justified">
+        <p>Macro-averaged accuracy across the thirteen downstream benchmarks stays within <strong>0.01</strong> of the base for every model, and 11 of 13 individual tasks stay within &plusmn;0.02 across all models tested. A two one-sided test against a &plusmn;0.01 margin gives a 90% CI of [&minus;0.001, +0.007] &mdash; inside the margin on both sides, so general capabilities are statistically <em>equivalent</em> to base, not merely indistinguishable from it.</p>
+        <p>ARC-Challenge improves consistently across all six models and is the only benchmark with a uniform upward shift. CommonsenseQA, shown above, is the only benchmark on which any model loses more than two points, and the degradation concentrates on the OLMo2 family &mdash; precisely the family that gains the most on Daily Oracle. The worst-case loss is 0.06 on a single task out of thirteen, set against substantial Daily Oracle gains and a parallel ARC-Challenge improvement.</p>
+      </div>
+
+      <div class="table-block">
+        <div class="table-toolbar">
+          <h4>Table 3 &middot; Full 13-task downstream suite (accuracy)</h4>
+          <input type="text" class="table-filter" data-filter-table="table-downstream" placeholder="Filter by model or config&hellip;">
+        </div>
+        <div class="table-wrap">
+          <table class="sortable-table" id="table-downstream">
+            <thead>
+              <tr>
+                <th data-type="text">Model</th>
+                <th data-type="text">Config</th>
+                <th data-type="num">LR</th>
+                <th data-type="text">Score</th>
+                <th data-type="num" title="PIQA">PIQA</th>
+                <th data-type="num" title="HellaSwag">HSwag</th>
+                <th data-type="num" title="WinoGrande">WinoG</th>
+                <th data-type="num" title="OpenBookQA">OBQA</th>
+                <th data-type="num" title="BoolQ">BoolQ</th>
+                <th data-type="num" title="SciQ">SciQ</th>
+                <th data-type="num" title="ARC-Easy">ARC-E</th>
+                <th data-type="num" title="ARC-Challenge">ARC-C</th>
+                <th data-type="num" title="COPA">COPA</th>
+                <th data-type="num" title="CommonsenseQA">CSQA</th>
+                <th data-type="num" title="SocialIQA">SIQA</th>
+                <th data-type="num" title="Basic Arithmetic">Arith</th>
+                <th data-type="num" title="MMLU Average">MMLU</th>
+                <th data-type="num" title="Macro-average">Avg</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-base"><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.81">0.81</td><td data-value="0.79">0.79</td><td data-value="0.74">0.74</td><td data-value="0.45">0.45</td><td data-value="0.83">0.83</td><td data-value="0.96">0.96</td><td data-value="0.82">0.82</td><td data-value="0.53">0.53</td><td data-value="0.88">0.88</td><td data-value="0.61">0.61</td><td data-value="0.53">0.53</td><td data-value="0.97">0.97</td><td data-value="0.60">0.60</td><td data-value="0.73">0.73</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1e-6</td><td data-value="3.5">3.5</td><td data-value="0.81">0.81</td><td data-value="0.79">0.79</td><td data-value="0.74">0.74</td><td data-value="0.46">0.46</td><td data-value="0.82">0.82</td><td data-value="0.96">0.96</td><td data-value="0.83">0.83</td><td data-value="0.55">0.55</td><td data-value="0.87">0.87</td><td data-value="0.61">0.61</td><td data-value="0.53">0.53</td><td data-value="0.98">0.98</td><td data-value="0.60">0.60</td><td data-value="0.73" class="best">0.73</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT (cont)">CPT (cont)</td><td data-value="0.000001">1e-6</td><td data-value="cont">cont</td><td data-value="0.81">0.81</td><td data-value="0.79">0.79</td><td data-value="0.74">0.74</td><td data-value="0.45">0.45</td><td data-value="0.82">0.82</td><td data-value="0.96">0.96</td><td data-value="0.83">0.83</td><td data-value="0.55">0.55</td><td data-value="0.87">0.87</td><td data-value="0.61">0.61</td><td data-value="0.53">0.53</td><td data-value="0.98">0.98</td><td data-value="0.60">0.60</td><td data-value="0.73">0.73</td></tr>
+
+              <tr class="row-base"><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.74">0.74</td><td data-value="0.64">0.64</td><td data-value="0.61">0.61</td><td data-value="0.38">0.38</td><td data-value="0.65">0.65</td><td data-value="0.92">0.92</td><td data-value="0.65">0.65</td><td data-value="0.37">0.37</td><td data-value="0.78">0.78</td><td data-value="0.47">0.47</td><td data-value="0.46">0.46</td><td data-value="0.77">0.77</td><td data-value="0.33">0.33</td><td data-value="0.60">0.60</td></tr>
+              <tr><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.74">0.74</td><td data-value="0.64">0.64</td><td data-value="0.60">0.60</td><td data-value="0.38">0.38</td><td data-value="0.65">0.65</td><td data-value="0.92">0.92</td><td data-value="0.65">0.65</td><td data-value="0.36">0.36</td><td data-value="0.77">0.77</td><td data-value="0.47">0.47</td><td data-value="0.46">0.46</td><td data-value="0.78">0.78</td><td data-value="0.33">0.33</td><td data-value="0.60">0.60</td></tr>
+              <tr><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="CPT">CPT</td><td data-value="0.000003">3e-6</td><td data-value="4.0">4.0</td><td data-value="0.75">0.75</td><td data-value="0.64">0.64</td><td data-value="0.60">0.60</td><td data-value="0.39">0.39</td><td data-value="0.65">0.65</td><td data-value="0.92">0.92</td><td data-value="0.66">0.66</td><td data-value="0.35">0.35</td><td data-value="0.77">0.77</td><td data-value="0.47">0.47</td><td data-value="0.46">0.46</td><td data-value="0.76">0.76</td><td data-value="0.33">0.33</td><td data-value="0.60">0.60</td></tr>
+              <tr><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="CPT">CPT</td><td data-value="0.000005">5e-6</td><td data-value="4.0">4.0</td><td data-value="0.74">0.74</td><td data-value="0.64">0.64</td><td data-value="0.61">0.61</td><td data-value="0.39">0.39</td><td data-value="0.65">0.65</td><td data-value="0.93">0.93</td><td data-value="0.66">0.66</td><td data-value="0.35">0.35</td><td data-value="0.78">0.78</td><td data-value="0.46">0.46</td><td data-value="0.46">0.46</td><td data-value="0.77">0.77</td><td data-value="0.34">0.34</td><td data-value="0.60">0.60</td></tr>
+              <tr><td data-value="Llama-3.2-1B">Llama-3.2-1B</td><td data-value="CPT">CPT</td><td data-value="0.00001">1e-5</td><td data-value="4.0">4.0</td><td data-value="0.75">0.75</td><td data-value="0.63">0.63</td><td data-value="0.61">0.61</td><td data-value="0.38">0.38</td><td data-value="0.65">0.65</td><td data-value="0.93">0.93</td><td data-value="0.69">0.69</td><td data-value="0.37">0.37</td><td data-value="0.78">0.78</td><td data-value="0.45">0.45</td><td data-value="0.45">0.45</td><td data-value="0.77">0.77</td><td data-value="0.34">0.34</td><td data-value="0.60" class="best">0.60</td></tr>
+
+              <tr class="row-base"><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.77">0.77</td><td data-value="0.74">0.74</td><td data-value="0.69">0.69</td><td data-value="0.41">0.41</td><td data-value="0.74">0.74</td><td data-value="0.95">0.95</td><td data-value="0.75">0.75</td><td data-value="0.43">0.43</td><td data-value="0.85">0.85</td><td data-value="0.59">0.59</td><td data-value="0.52">0.52</td><td data-value="0.97">0.97</td><td data-value="0.52">0.52</td><td data-value="0.69">0.69</td></tr>
+              <tr><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.77">0.77</td><td data-value="0.73">0.73</td><td data-value="0.69">0.69</td><td data-value="0.42">0.42</td><td data-value="0.74">0.74</td><td data-value="0.95">0.95</td><td data-value="0.75">0.75</td><td data-value="0.45">0.45</td><td data-value="0.85">0.85</td><td data-value="0.60">0.60</td><td data-value="0.52">0.52</td><td data-value="0.97">0.97</td><td data-value="0.52">0.52</td><td data-value="0.69">0.69</td></tr>
+              <tr><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="CPT">CPT</td><td data-value="0.000003">3e-6</td><td data-value="4.0">4.0</td><td data-value="0.78">0.78</td><td data-value="0.73">0.73</td><td data-value="0.70">0.70</td><td data-value="0.42">0.42</td><td data-value="0.75">0.75</td><td data-value="0.95">0.95</td><td data-value="0.76">0.76</td><td data-value="0.46">0.46</td><td data-value="0.86">0.86</td><td data-value="0.59">0.59</td><td data-value="0.52">0.52</td><td data-value="0.97">0.97</td><td data-value="0.52">0.52</td><td data-value="0.69" class="best">0.69</td></tr>
+              <tr><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="CPT">CPT</td><td data-value="0.000005">5e-6</td><td data-value="4.0">4.0</td><td data-value="0.78">0.78</td><td data-value="0.73">0.73</td><td data-value="0.69">0.69</td><td data-value="0.41">0.41</td><td data-value="0.75">0.75</td><td data-value="0.95">0.95</td><td data-value="0.77">0.77</td><td data-value="0.46">0.46</td><td data-value="0.85">0.85</td><td data-value="0.58">0.58</td><td data-value="0.52">0.52</td><td data-value="0.96">0.96</td><td data-value="0.52">0.52</td><td data-value="0.69">0.69</td></tr>
+              <tr><td data-value="Llama-3.2-3B">Llama-3.2-3B</td><td data-value="CPT">CPT</td><td data-value="0.00001">1e-5</td><td data-value="4.0">4.0</td><td data-value="0.77">0.77</td><td data-value="0.73">0.73</td><td data-value="0.69">0.69</td><td data-value="0.43">0.43</td><td data-value="0.75">0.75</td><td data-value="0.95">0.95</td><td data-value="0.77">0.77</td><td data-value="0.46">0.46</td><td data-value="0.86">0.86</td><td data-value="0.57">0.57</td><td data-value="0.51">0.51</td><td data-value="0.96">0.96</td><td data-value="0.52">0.52</td><td data-value="0.69">0.69</td></tr>
+
+              <tr class="row-base"><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.59">0.59</td><td data-value="0.39">0.39</td><td data-value="0.38">0.38</td><td data-value="0.43">0.43</td><td data-value="0.46">0.46</td><td data-value="0.33">0.33</td><td data-value="0.76">0.76</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.55">0.55</td><td data-value="0.26">0.26</td><td data-value="0.46">0.46</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.40">0.40</td><td data-value="0.38">0.38</td><td data-value="0.44">0.44</td><td data-value="0.46">0.46</td><td data-value="0.34">0.34</td><td data-value="0.78">0.78</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.55">0.55</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.000003">3e-6</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.39">0.39</td><td data-value="0.38">0.38</td><td data-value="0.44">0.44</td><td data-value="0.45">0.45</td><td data-value="0.34">0.34</td><td data-value="0.76">0.76</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.55">0.55</td><td data-value="0.26">0.26</td><td data-value="0.46">0.46</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.000005">5e-6</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.39">0.39</td><td data-value="0.38">0.38</td><td data-value="0.43">0.43</td><td data-value="0.46">0.46</td><td data-value="0.33">0.33</td><td data-value="0.77">0.77</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.55">0.55</td><td data-value="0.26">0.26</td><td data-value="0.46">0.46</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.00001">1e-5</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.57">0.57</td><td data-value="0.39">0.39</td><td data-value="0.38">0.38</td><td data-value="0.43">0.43</td><td data-value="0.46">0.46</td><td data-value="0.34">0.34</td><td data-value="0.77">0.77</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.56">0.56</td><td data-value="0.26">0.26</td><td data-value="0.46">0.46</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.00002">2e-5</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.59">0.59</td><td data-value="0.39">0.39</td><td data-value="0.38">0.38</td><td data-value="0.44">0.44</td><td data-value="0.47">0.47</td><td data-value="0.34">0.34</td><td data-value="0.78">0.78</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.54">0.54</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.00003">3e-5</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.40">0.40</td><td data-value="0.38">0.38</td><td data-value="0.47">0.47</td><td data-value="0.47">0.47</td><td data-value="0.34">0.34</td><td data-value="0.79">0.79</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.53">0.53</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.00004">4e-5</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.56">0.56</td><td data-value="0.40">0.40</td><td data-value="0.38">0.38</td><td data-value="0.49">0.49</td><td data-value="0.48">0.48</td><td data-value="0.34">0.34</td><td data-value="0.81">0.81</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.51">0.51</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.00005">5e-5</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.56">0.56</td><td data-value="0.41">0.41</td><td data-value="0.38">0.38</td><td data-value="0.55">0.55</td><td data-value="0.49">0.49</td><td data-value="0.35">0.35</td><td data-value="0.78">0.78</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.50">0.50</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.00008">8e-5</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.60">0.60</td><td data-value="0.41">0.41</td><td data-value="0.38">0.38</td><td data-value="0.63">0.63</td><td data-value="0.54">0.54</td><td data-value="0.35">0.35</td><td data-value="0.76">0.76</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.51">0.51</td><td data-value="0.26">0.26</td><td data-value="0.49">0.49</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.0001">1e-4</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.53">0.53</td><td data-value="0.57">0.57</td><td data-value="0.43">0.43</td><td data-value="0.38">0.38</td><td data-value="0.68">0.68</td><td data-value="0.55">0.55</td><td data-value="0.34">0.34</td><td data-value="0.76">0.76</td><td data-value="0.25">0.25</td><td data-value="0.41">0.41</td><td data-value="0.50">0.50</td><td data-value="0.25">0.25</td><td data-value="0.49">0.49</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.0003">3e-4</td><td data-value="4.0">4.0</td><td data-value="0.68">0.68</td><td data-value="0.49">0.49</td><td data-value="0.58">0.58</td><td data-value="0.42">0.42</td><td data-value="0.62">0.62</td><td data-value="0.86">0.86</td><td data-value="0.64">0.64</td><td data-value="0.33">0.33</td><td data-value="0.74">0.74</td><td data-value="0.27">0.27</td><td data-value="0.40">0.40</td><td data-value="0.47">0.47</td><td data-value="0.26">0.26</td><td data-value="0.52" class="best">0.52</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT (7ep)">CPT (7ep)</td><td data-value="0.00003">3e-5</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.57">0.57</td><td data-value="0.40">0.40</td><td data-value="0.38">0.38</td><td data-value="0.46">0.46</td><td data-value="0.46">0.46</td><td data-value="0.35">0.35</td><td data-value="0.78">0.78</td><td data-value="0.25">0.25</td><td data-value="0.41">0.41</td><td data-value="0.50">0.50</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="CPT">CPT</td><td data-value="0.00003">3e-5</td><td data-value="3.5">3.5</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.41">0.41</td><td data-value="0.38">0.38</td><td data-value="0.49">0.49</td><td data-value="0.48">0.48</td><td data-value="0.34">0.34</td><td data-value="0.79">0.79</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.52">0.52</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r32 a32">LoRA r32 &alpha;32</td><td data-value="0.0001">1e-4</td><td data-value="4.0">4.0</td><td data-value="0.69">0.69</td><td data-value="0.54">0.54</td><td data-value="0.57">0.57</td><td data-value="0.39">0.39</td><td data-value="0.38">0.38</td><td data-value="0.42">0.42</td><td data-value="0.48">0.48</td><td data-value="0.34">0.34</td><td data-value="0.79">0.79</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.51">0.51</td><td data-value="0.26">0.26</td><td data-value="0.46">0.46</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r32 a32">LoRA r32 &alpha;32</td><td data-value="0.0003">3e-4</td><td data-value="4.0">4.0</td><td data-value="0.69">0.69</td><td data-value="0.54">0.54</td><td data-value="0.57">0.57</td><td data-value="0.40">0.40</td><td data-value="0.38">0.38</td><td data-value="0.49">0.49</td><td data-value="0.48">0.48</td><td data-value="0.33">0.33</td><td data-value="0.74">0.74</td><td data-value="0.25">0.25</td><td data-value="0.41">0.41</td><td data-value="0.47">0.47</td><td data-value="0.26">0.26</td><td data-value="0.46">0.46</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r32 a64">LoRA r32 &alpha;64</td><td data-value="0.0001">1e-4</td><td data-value="4.0">4.0</td><td data-value="0.69">0.69</td><td data-value="0.54">0.54</td><td data-value="0.57">0.57</td><td data-value="0.39">0.39</td><td data-value="0.38">0.38</td><td data-value="0.44">0.44</td><td data-value="0.47">0.47</td><td data-value="0.32">0.32</td><td data-value="0.73">0.73</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.51">0.51</td><td data-value="0.26">0.26</td><td data-value="0.46">0.46</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r32 a64">LoRA r32 &alpha;64</td><td data-value="0.0003">3e-4</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.41">0.41</td><td data-value="0.38">0.38</td><td data-value="0.55">0.55</td><td data-value="0.47">0.47</td><td data-value="0.34">0.34</td><td data-value="0.78">0.78</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.48">0.48</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r128 a128">LoRA r128 &alpha;128</td><td data-value="0.0001">1e-4</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.40">0.40</td><td data-value="0.38">0.38</td><td data-value="0.45">0.45</td><td data-value="0.47">0.47</td><td data-value="0.33">0.33</td><td data-value="0.80">0.80</td><td data-value="0.24">0.24</td><td data-value="0.40">0.40</td><td data-value="0.50">0.50</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r128 a128">LoRA r128 &alpha;128</td><td data-value="0.0003">3e-4</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.41">0.41</td><td data-value="0.38">0.38</td><td data-value="0.62">0.62</td><td data-value="0.49">0.49</td><td data-value="0.34">0.34</td><td data-value="0.81">0.81</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.51">0.51</td><td data-value="0.26">0.26</td><td data-value="0.48">0.48</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r128 a128">LoRA r128 &alpha;128</td><td data-value="0.0006">6e-4</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.59">0.59</td><td data-value="0.41">0.41</td><td data-value="0.38">0.38</td><td data-value="0.65">0.65</td><td data-value="0.55">0.55</td><td data-value="0.35">0.35</td><td data-value="0.79">0.79</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.42">0.42</td><td data-value="0.26">0.26</td><td data-value="0.48">0.48</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r128 a256">LoRA r128 &alpha;256</td><td data-value="0.0001">1e-4</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.41">0.41</td><td data-value="0.38">0.38</td><td data-value="0.53">0.53</td><td data-value="0.48">0.48</td><td data-value="0.33">0.33</td><td data-value="0.78">0.78</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.50">0.50</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r128 a256">LoRA r128 &alpha;256</td><td data-value="0.0003">3e-4</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.41">0.41</td><td data-value="0.38">0.38</td><td data-value="0.63">0.63</td><td data-value="0.52">0.52</td><td data-value="0.34">0.34</td><td data-value="0.78">0.78</td><td data-value="0.25">0.25</td><td data-value="0.41">0.41</td><td data-value="0.44">0.44</td><td data-value="0.26">0.26</td><td data-value="0.48">0.48</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r256 a256">LoRA r256 &alpha;256</td><td data-value="0.0001">1e-4</td><td data-value="4.0">4.0</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.58">0.58</td><td data-value="0.40">0.40</td><td data-value="0.38">0.38</td><td data-value="0.53">0.53</td><td data-value="0.49">0.49</td><td data-value="0.34">0.34</td><td data-value="0.80">0.80</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.50">0.50</td><td data-value="0.26">0.26</td><td data-value="0.47">0.47</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r256 a256">LoRA r256 &alpha;256</td><td data-value="0.0003">3e-4</td><td data-value="4.0">4.0</td><td data-value="0.69">0.69</td><td data-value="0.54">0.54</td><td data-value="0.57">0.57</td><td data-value="0.42">0.42</td><td data-value="0.38">0.38</td><td data-value="0.65">0.65</td><td data-value="0.52">0.52</td><td data-value="0.34">0.34</td><td data-value="0.81">0.81</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.48">0.48</td><td data-value="0.26">0.26</td><td data-value="0.49">0.49</td></tr>
+              <tr><td data-value="Gemma-3-1B">Gemma-3-1B</td><td data-value="LoRA r256 a256">LoRA r256 &alpha;256</td><td data-value="0.0006">6e-4</td><td data-value="4.0">4.0</td><td data-value="0.69">0.69</td><td data-value="0.53">0.53</td><td data-value="0.58">0.58</td><td data-value="0.43">0.43</td><td data-value="0.38">0.38</td><td data-value="0.70">0.70</td><td data-value="0.54">0.54</td><td data-value="0.38">0.38</td><td data-value="0.80">0.80</td><td data-value="0.25">0.25</td><td data-value="0.40">0.40</td><td data-value="0.51">0.51</td><td data-value="0.26">0.26</td><td data-value="0.50">0.50</td></tr>
+
+              <tr class="row-base"><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.76">0.76</td><td data-value="0.69">0.69</td><td data-value="0.64">0.64</td><td data-value="0.39">0.39</td><td data-value="0.62">0.62</td><td data-value="0.96">0.96</td><td data-value="0.73">0.73</td><td data-value="0.41">0.41</td><td data-value="0.81">0.81</td><td data-value="0.57">0.57</td><td data-value="0.50">0.50</td><td data-value="0.85">0.85</td><td data-value="0.43">0.43</td><td data-value="0.64">0.64</td></tr>
+              <tr><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.76">0.76</td><td data-value="0.68">0.68</td><td data-value="0.64">0.64</td><td data-value="0.39">0.39</td><td data-value="0.72">0.72</td><td data-value="0.94">0.94</td><td data-value="0.75">0.75</td><td data-value="0.45">0.45</td><td data-value="0.80">0.80</td><td data-value="0.50">0.50</td><td data-value="0.49">0.49</td><td data-value="0.85">0.85</td><td data-value="0.43">0.43</td><td data-value="0.65" class="best">0.65</td></tr>
+              <tr><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="CPT">CPT</td><td data-value="0.0000263">2.63e-5</td><td data-value="4.0">4.0</td><td data-value="0.74">0.74</td><td data-value="0.66">0.66</td><td data-value="0.61">0.61</td><td data-value="0.41">0.41</td><td data-value="0.70">0.70</td><td data-value="0.94">0.94</td><td data-value="0.77">0.77</td><td data-value="0.44">0.44</td><td data-value="0.81">0.81</td><td data-value="0.47">0.47</td><td data-value="0.48">0.48</td><td data-value="0.79">0.79</td><td data-value="0.40">0.40</td><td data-value="0.63">0.63</td></tr>
+              <tr><td data-value="OLMo2-1B">OLMo2-1B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1e-6</td><td data-value="3.5">3.5</td><td data-value="0.76">0.76</td><td data-value="0.67">0.67</td><td data-value="0.64">0.64</td><td data-value="0.41">0.41</td><td data-value="0.71">0.71</td><td data-value="0.94">0.94</td><td data-value="0.75">0.75</td><td data-value="0.45">0.45</td><td data-value="0.80">0.80</td><td data-value="0.48">0.48</td><td data-value="0.48">0.48</td><td data-value="0.82">0.82</td><td data-value="0.43">0.43</td><td data-value="0.64">0.64</td></tr>
+
+              <tr class="row-base"><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="Base">Base</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.81">0.81</td><td data-value="0.80">0.80</td><td data-value="0.74">0.74</td><td data-value="0.46">0.46</td><td data-value="0.79">0.79</td><td data-value="0.97">0.97</td><td data-value="0.82">0.82</td><td data-value="0.54">0.54</td><td data-value="0.90">0.90</td><td data-value="0.64">0.64</td><td data-value="0.56">0.56</td><td data-value="0.92">0.92</td><td data-value="0.58">0.58</td><td data-value="0.73">0.73</td></tr>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="CPT">CPT</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.81">0.81</td><td data-value="0.79">0.79</td><td data-value="0.75">0.75</td><td data-value="0.48">0.48</td><td data-value="0.84">0.84</td><td data-value="0.96">0.96</td><td data-value="0.83">0.83</td><td data-value="0.54">0.54</td><td data-value="0.90">0.90</td><td data-value="0.58">0.58</td><td data-value="0.54">0.54</td><td data-value="0.88">0.88</td><td data-value="0.57">0.57</td><td data-value="0.73" class="best">0.73</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End cost / general capabilities -->
+
+
+  <!-- Recipe -->
+  <section class="section" id="recipe">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">What Is the Learning Recipe?</h2>
+      <p class="section-intro">Having established that CPT acquires knowledge without catastrophic forgetting and largely preserves general capabilities, we isolate three configuration choices: data quality vs. quantity, learning rate, and parameter-efficient adaptation via LoRA.</p>
+
+      <h3 class="title is-4">Data quality dominates quantity</h3>
+      <div class="figure-block">
+        <img src="static/images/paper/data-size-avg.png" alt="Daily Oracle Macro-F1 comparing the 6B-token high-quality slice against the 40B-token broader slice, across model families" loading="lazy">
+        <p class="figure-caption">A curated 6B-token high-quality slice (score &ge; 4) achieves most of the available CPT signal. Expanding to a sevenfold larger but lower-quality 40B-token slice (score &ge; 3.5) yields only marginal additional gains; training 7 epochs on the high-quality slice provides negligible improvement over a single pass.</p>
+      </div>
+      <div class="content has-text-justified">
+        <p>For Llama-3.1-8B and Gemma-3-1B, the two slices are nearly indistinguishable. Only OLMo2-1B benefits from the larger slice, improving from 0.49 to 0.51 &mdash; a modest gain relative to what the high-quality slice already contributed. Training Gemma-3-1B on the score&ge;4 slice for ~7 epochs (matching the 40B-token budget) yields identical scores to a single pass, confirming that additional passes over high-quality data provide no benefit once the signal is exhausted.</p>
+      </div>
+
+      <h3 class="title is-4">Knowledge acquisition and general capability need different learning rates</h3>
+      <div class="figure-block">
+        <img src="static/images/paper/lr-gemma-avg-time.png" alt="Effect of learning rate on Daily Oracle Macro-F1 and downstream accuracy for Gemma-3-1B" loading="lazy" style="max-width: 700px; margin: 0 auto;">
+        <p class="figure-caption">Daily Oracle Macro-F1 (Gemma-3-1B, sweep across 9 learning rates) peaks near 3&times;10&#8315;&#8309; and collapses at higher rates, while downstream accuracy keeps improving at rates that already degrade factual recall. Dashed lines mark base model performance.</p>
+      </div>
+      <div class="content has-text-justified">
+        <p>The practical implication: the optimal learning rate is a function of the deployment objective. Practitioners targeting factual currency should use a moderate rate around 3&times;10&#8315;&#8309;; those targeting general capability gains can tolerate higher rates, at the cost of factual precision. We recommend tuning against a held-out slice of the target evaluation surface rather than inheriting the learning rate from the original pretraining recipe.</p>
+      </div>
+
+      <h3 class="title is-4">LoRA at sufficient rank matches full CPT</h3>
+      <div class="figure-block">
+        <img src="static/images/paper/lora-gemma-f1-macro.png" alt="LoRA vs full CPT Macro-F1 on Daily Oracle for Gemma-3-1B across rank/scaling configurations" loading="lazy" style="max-width: 460px; margin: 0 auto;">
+        <p class="figure-caption">LoRA rank/scaling sweep for Gemma-3-1B: the smallest configurations trail full CPT slightly, while higher-rank variants match or slightly exceed it &mdash; with reduced GPU memory footprint, though no measurable wall-clock speedup (LoRA still requires full forward/backward passes through the frozen model).</p>
+      </div>
+      <div class="content has-text-justified">
+        <p>This conclusion is not specific to Gemma-3-1B: repeating the experiment on Llama-3.2-3B, LoRA at ranks 128 and 256 reaches after-cutoff Macro-F1 of 0.525 and 0.534 against 0.540 for full CPT (base: 0.484), with all four LoRA configurations landing within 0.530&ndash;0.537 before cutoff.</p>
+      </div>
+
+      <div class="recipe-box">
+        <h3 class="title is-4" style="margin-bottom: 1.25rem;">An Operational Recipe for Time-Incremental Updates</h3>
+        <ol class="recipe-steps">
+          <li><strong>Source data from a curated, high-quality post-cutoff slice</strong> (FineWeb-Edu score &ge; 4 or equivalent) &mdash; large lower-quality crawls offer poor return on compute.</li>
+          <li><strong>Train at a moderate learning rate (~3&times;10&#8315;&#8309;)</strong> when factual recall is the primary objective, tuning against a held-out temporal slice.</li>
+          <li><strong>Use LoRA at rank &ge; 128 if memory-bound</strong> &mdash; it matches full CPT on knowledge acquisition.</li>
+          <li><strong>Plan for short runs:</strong> performance plateaus within the first third of training.</li>
+          <li><strong>Apply CPT before SFT</strong> in the post-training pipeline.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+  <!-- End recipe -->
+
+
+  <!-- Deployment -->
+  <section class="section hero is-light" id="deployment">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Does the Recipe Survive Deployment?</h2>
+      <p class="section-intro">Deployed LLMs undergo post-training (SFT, then preference optimization) on top of a base checkpoint. We apply an identical Tulu&nbsp;3 SFT + DPO pipeline to base and CPT checkpoints of OLMo2-7B and Llama-3.1-8B, holding the post-training data fixed so that any difference is attributable to CPT alone.</p>
+
+      <div class="figure-block">
+        <div class="figure-row">
+          <div><img src="static/images/paper/posttrain-olmo2-7b-f1-macro.png" alt="Daily Oracle Macro-F1 for OLMo2-7B post-training configurations" loading="lazy"></div>
+          <div><img src="static/images/paper/posttrain-llama8b-f1-macro.png" alt="Daily Oracle Macro-F1 for Llama-3.1-8B post-training configurations" loading="lazy"></div>
+        </div>
+        <p class="figure-caption"><strong>Figure 4.</strong> Macro-F1 on Daily Oracle across post-training configurations for OLMo2-7B (left) and Llama-3.1-8B (right). CPT variants consistently outperform their non-CPT counterparts after SFT and DPO.</p>
+      </div>
+
+      <div class="content has-text-justified">
+        <p>CPT knowledge is not washed out by subsequent instruction tuning: on both before- and after-cutoff questions, all CPT variants outperform their non-CPT baselines. The gain is more pronounced for checkpoints trained on the larger score&ge;3.5 slice, suggesting more CPT signal injected before SFT translates into more retained signal after.</p>
+        <p>DPO's interaction with CPT is <strong>family-dependent</strong>. For both base models, DPO has little effect when applied without CPT. On top of CPT, however, it helps OLMo2-7B but slightly <em>hurts</em> Llama-3.1-8B &mdash; reminiscent of the alignment-tax phenomenon, where RLHF/DPO erodes SFT capabilities. With only two base models, we cannot yet attribute this to a robust family effect.</p>
+      </div>
+
+      <div class="table-block">
+        <div class="table-toolbar">
+          <h4>Table 4 &middot; Post-training results (Daily Oracle, Macro-F1)</h4>
+          <input type="text" class="table-filter" data-filter-table="table-posttrain" placeholder="Filter by model or config&hellip;">
+        </div>
+        <div class="table-wrap">
+          <table class="sortable-table" id="table-posttrain">
+            <thead>
+              <tr>
+                <th data-type="text">Model</th>
+                <th data-type="text">Configuration</th>
+                <th data-type="text">CPT?</th>
+                <th data-type="num">LR</th>
+                <th data-type="text">Score</th>
+                <th data-type="num">MC Before</th>
+                <th data-type="num">MC After</th>
+                <th data-type="num">TF Before</th>
+                <th data-type="num">TF After</th>
+                <th data-type="num">All Avg</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="Instruct">Instruct</td><td data-value="No">No</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.43">0.43</td><td data-value="0.37">0.37</td><td data-value="0.65">0.65</td><td data-value="0.55">0.55</td><td data-value="0.50">0.50</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="Tulu-3">Tulu-3</td><td data-value="No">No</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.52">0.52</td><td data-value="0.38">0.38</td><td data-value="0.63">0.63</td><td data-value="0.55">0.55</td><td data-value="0.52">0.52</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="Tulu-3 SFT+DPO (ours)">Tulu-3 SFT+DPO (ours)</td><td data-value="No">No</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.51">0.51</td><td data-value="0.40">0.40</td><td data-value="0.60">0.60</td><td data-value="0.51">0.51</td><td data-value="0.51">0.51</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="Tulu-3 SFT (ours)">Tulu-3 SFT (ours)</td><td data-value="No">No</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.49">0.49</td><td data-value="0.37">0.37</td><td data-value="0.59">0.59</td><td data-value="0.52">0.52</td><td data-value="0.49">0.49</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT+SFT+DPO">CPT+SFT+DPO</td><td data-value="Yes">Yes</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.51">0.51</td><td data-value="0.40">0.40</td><td data-value="0.58">0.58</td><td data-value="0.44">0.44</td><td data-value="0.48">0.48</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT+SFT">CPT+SFT</td><td data-value="Yes">Yes</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.51">0.51</td><td data-value="0.41">0.41</td><td data-value="0.59">0.59</td><td data-value="0.43">0.43</td><td data-value="0.48">0.48</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT+SFT+DPO">CPT+SFT+DPO</td><td data-value="Yes">Yes</td><td data-value="0.00001">1e-5</td><td data-value="4.0">4.0</td><td data-value="0.53">0.53</td><td data-value="0.47">0.47</td><td data-value="0.57">0.57</td><td data-value="0.47">0.47</td><td data-value="0.51">0.51</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT+SFT">CPT+SFT</td><td data-value="Yes">Yes</td><td data-value="0.00001">1e-5</td><td data-value="4.0">4.0</td><td data-value="0.53">0.53</td><td data-value="0.47">0.47</td><td data-value="0.59">0.59</td><td data-value="0.47">0.47</td><td data-value="0.52" class="best">0.52</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT+SFT+DPO">CPT+SFT+DPO</td><td data-value="Yes">Yes</td><td data-value="0.000001">1e-6</td><td data-value="3.5">3.5</td><td data-value="0.51">0.51</td><td data-value="0.38">0.38</td><td data-value="0.62">0.62</td><td data-value="0.49">0.49</td><td data-value="0.50">0.50</td></tr>
+              <tr><td data-value="Llama-3.1-8B">Llama-3.1-8B</td><td data-value="CPT+SFT">CPT+SFT</td><td data-value="Yes">Yes</td><td data-value="0.000001">1e-6</td><td data-value="3.5">3.5</td><td data-value="0.52">0.52</td><td data-value="0.38">0.38</td><td data-value="0.62">0.62</td><td data-value="0.51">0.51</td><td data-value="0.51">0.51</td></tr>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="Tulu-3">Tulu-3</td><td data-value="No">No</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.44">0.44</td><td data-value="0.44">0.44</td><td data-value="0.39">0.39</td><td data-value="0.37">0.37</td><td data-value="0.41">0.41</td></tr>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="Tulu-3 SFT+DPO (ours)">Tulu-3 SFT+DPO (ours)</td><td data-value="No">No</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.43">0.43</td><td data-value="0.43">0.43</td><td data-value="0.38">0.38</td><td data-value="0.37">0.37</td><td data-value="0.40">0.40</td></tr>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="Tulu-3 SFT (ours)">Tulu-3 SFT (ours)</td><td data-value="No">No</td><td data-value="">&mdash;</td><td data-value="&mdash;">&mdash;</td><td data-value="0.45">0.45</td><td data-value="0.43">0.43</td><td data-value="0.39">0.39</td><td data-value="0.37">0.37</td><td data-value="0.41">0.41</td></tr>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="CPT+SFT+DPO">CPT+SFT+DPO</td><td data-value="Yes">Yes</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.48">0.48</td><td data-value="0.46">0.46</td><td data-value="0.60">0.60</td><td data-value="0.54">0.54</td><td data-value="0.52" class="best">0.52</td></tr>
+              <tr><td data-value="OLMo2-7B">OLMo2-7B</td><td data-value="CPT+SFT">CPT+SFT</td><td data-value="Yes">Yes</td><td data-value="0.000001">1e-6</td><td data-value="4.0">4.0</td><td data-value="0.47">0.47</td><td data-value="0.45">0.45</td><td data-value="0.56">0.56</td><td data-value="0.51">0.51</td><td data-value="0.50">0.50</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End deployment -->
+
+
+  <!-- Additional analyses -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Additional Analyses</h2>
+
+      <h3 class="title is-4">The CPT advantage widens over time</h3>
+      <div class="content has-text-justified">
+        <p>Plotting Daily Oracle results by the timestamp of the source news article (rather than a single before/after split) reveals a clear temporal trend: the Macro-F1 gap between CPT and base models grows steadily as questions approach the present, most pronounced for the plastic families (OLMo2, Gemma-3-1B).</p>
+      </div>
+      <div class="figure-grid">
+        <div>
+          <img src="static/images/paper/over-time-f1-tf.png" alt="Macro-F1 on Daily Oracle True/False questions over time, 12-month EMA" loading="lazy">
+          <p class="figure-caption">True/False split, 12-month EMA.</p>
+        </div>
+        <div>
+          <img src="static/images/paper/over-time-f1-mc.png" alt="Macro-F1 on Daily Oracle Multiple Choice questions over time, 12-month EMA" loading="lazy">
+          <p class="figure-caption">Multiple Choice split, 12-month EMA.</p>
+        </div>
+      </div>
+
+      <h3 class="title is-4" style="margin-top: 3rem;">Gains are not driven by memorization</h3>
+      <div class="content has-text-justified">
+        <p>Daily Oracle has minimal overlap with our FineWeb-Edu slices (&asymp;1% of questions come from articles in the score&ge;4 training set). To probe memorization directly, we built an additional question set from articles known to be in the training corpus. If gains reflected simple recall, we would expect substantially larger improvements on this in-corpus set &mdash; instead, Macro-F1 deltas are comparable across both sets.</p>
+      </div>
+      <div class="figure-block">
+        <img src="static/images/paper/new-questions-f1.png" alt="CPT deltas on Daily Oracle vs. an in-corpus question set" loading="lazy" style="max-width: 640px; margin: 0 auto;">
+        <p class="figure-caption">CPT improvements on questions grounded in the pretraining corpus track improvements on Daily Oracle closely, evidence against verbatim memorization.</p>
+      </div>
+
+      <h3 class="title is-4" style="margin-top: 3rem;">Training dynamics: CPT converges early</h3>
+      <div class="content has-text-justified">
+        <p>Both knowledge acquisition and downstream accuracy plateau within the first third of training for OLMo2-1B and Llama-3.1-8B, suggesting short, periodically-repeated CPT runs are computationally sufficient.</p>
+      </div>
+      <div class="figure-grid">
+        <div>
+          <img src="static/images/paper/checkpoints-olmo-f1.png" alt="OLMo2-1B Daily Oracle Macro-F1 across intermediate checkpoints" loading="lazy">
+          <p class="figure-caption">OLMo2-1B &mdash; Daily Oracle Macro-F1 across checkpoints.</p>
+        </div>
+        <div>
+          <img src="static/images/paper/checkpoints-downstream-olmo.png" alt="OLMo2-1B downstream accuracy across intermediate checkpoints" loading="lazy">
+          <p class="figure-caption">OLMo2-1B &mdash; downstream accuracy across checkpoints.</p>
+        </div>
+        <div>
+          <img src="static/images/paper/checkpoints-llama-f1.png" alt="Llama-3.1-8B Daily Oracle Macro-F1 across intermediate checkpoints" loading="lazy">
+          <p class="figure-caption">Llama-3.1-8B &mdash; Daily Oracle Macro-F1 across checkpoints.</p>
+        </div>
+        <div>
+          <img src="static/images/paper/checkpoints-downstream-llama.png" alt="Llama-3.1-8B downstream accuracy across intermediate checkpoints" loading="lazy">
+          <p class="figure-caption">Llama-3.1-8B &mdash; downstream accuracy across checkpoints.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End additional analyses -->
+
+
+  <!-- Related work -->
+  <section class="section hero is-light" id="related-work">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Related Work</h2>
+      <div class="rw-block">
+        <h4>Continued pretraining</h4>
+        <p>Prior work established that continued pretraining on domain-shifted corpora can substantially improve downstream performance, potentially at the cost of forgetting the original distribution when the new data differ in character. Mitigations include careful learning-rate engineering and moderate data replay. The existing literature focuses primarily on <em>domain</em> shifts (general&rarr;medical, code, finance), not the <em>temporal</em> shift that accumulates as the world evolves past a model's cutoff.</p>
+      </div>
+      <div class="rw-block">
+        <h4>Temporal continued pretraining</h4>
+        <p>A line of research studies temporal misalignment directly: perplexity on news and scientific text degrades systematically as the train&ndash;test year gap grows, temporal CPT recovers only a fraction of what target-period finetuning achieves, and the effective knowledge cutoffs of deployed LLMs often lag their reported cutoffs. Prior formalizations target retaining time-invariant facts, updating outdated ones, and acquiring new ones &mdash; largely holding the model fixed and varying the update procedure, leaving open how forgetting and acquisition vary across model families, post-training stages, and data quality regimes.</p>
+      </div>
+      <div class="rw-block">
+        <h4>Temporal benchmarking</h4>
+        <p>Evaluating LLMs under a shifting data distribution requires moving beyond static benchmarks like MMLU and GSM8K. Forecasting benchmarks (Autocast, Autocast++, MIRAI) draw questions from resolved forecasting tournaments and agentic event prediction, but rely on curated pools that do not continuously regenerate. Daily Oracle closes this gap by sourcing daily news and automatically generating True/False and Multiple Choice questions continuously, and shows that LLM accuracy degrades substantially over time, with degradation accelerating after the knowledge cutoff and persisting under retrieval augmentation.</p>
+      </div>
+    </div>
+  </section>
+  <!-- End related work -->
+
+
+  <!-- Limitations & statements -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Limitations</h2>
+      <ul class="limitations-list">
+        <li><strong>Language.</strong> Our pretraining corpus is English-only (FineWeb-Edu); whether the same recipe transfers to multilingual CPT is open.</li>
+        <li><strong>Single temporal benchmark.</strong> Our primary temporal evaluation is Daily Oracle; a multi-benchmark replication would strengthen the conclusions.</li>
+        <li><strong>Learning-rate sweep depth.</strong> Conducted in depth on Gemma-3-1B only; the divergence of QA and downstream optima may take a different shape on other families.</li>
+        <li><strong>Single CPT cycle.</strong> Whether iterative time-incremental updates compound gains or saturate over multiple rounds remains unresolved.</li>
+        <li><strong>Scale.</strong> Experiments are limited to models up to 7&ndash;8B parameters; whether the same trends hold at frontier scale is an open question.</li>
+      </ul>
+
+      <div style="max-width: 46rem; margin: 3rem auto 0;">
+        <details class="statement-accordion">
+          <summary>AI use statement</summary>
+          <div class="statement-body">In this work, we used generative AI tools to assist with writing and editing (polishing prose and LaTeX formatting) and with routine coding assistance for data-processing and plotting scripts. Generative AI was not used to generate research ideas, experimental designs, or results, and was not used to author the reported findings. All AI-assisted text and code were reviewed and verified by the authors.</div>
+        </details>
+        <details class="statement-accordion">
+          <summary>Ethics statement</summary>
+          <div class="statement-body">Our study uses only publicly available resources: FineWeb-Edu for continued pretraining, Daily Oracle for temporal evaluation, standard downstream benchmarks, and Tulu 3 for post-training. No human subjects were involved and no new data were collected. Because the CPT corpus is derived from Common Crawl, our updated models inherit whatever factual errors, biases, and objectionable content survive FineWeb-Edu's quality filtering; CPT on fresh web dumps neither introduces new safety mitigations nor removes existing ones.</div>
+        </details>
+        <details class="statement-accordion">
+          <summary>Reproducibility statement</summary>
+          <div class="statement-body">The full experimental setup &mdash; models and knowledge cutoffs, FineWeb-Edu slices and Common Crawl dump windows, learning-rate schedules, evaluation protocol, downstream tasks, and hardware &mdash; is reported in the paper, together with complete per-model, per-configuration results tables so each comparison can be checked directly. All datasets used are publicly available; training pipelines build on the official OLMo2 and HuggingFace Trainer codebases together with the Tulu 3 recipe.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+  <!-- End limitations & statements -->
+
+
+  <!--BibTex citation -->
+  <section class="section" id="bibtex">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{oncel2027timeincremental,
+  title     = {Time-Incremental Continued Pretraining of LLMs: Knowledge Updates Without Catastrophic Forgetting},
+  author    = {\"{O}ncel, Firat and Ali, Salman Hussain and Ravanelli, Mirco and Subakan, Cem and Yildiz, Cagatay},
+  year      = {2027},
+  note      = {Preprint}
+}</code></pre>
+    </div>
+</section>
+  <!--End BibTex citation -->
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </main>
+</body>
+</html>
