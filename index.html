@@ -648,27 +648,6 @@
   <!-- End additional analyses -->
 
 
-  <!-- Related work -->
-  <section class="section hero is-light" id="related-work">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Related Work</h2>
-      <div class="rw-block">
-        <h4>Continued pretraining</h4>
-        <p>Prior work established that continued pretraining on domain-shifted corpora can substantially improve downstream performance, potentially at the cost of forgetting the original distribution when the new data differ in character. Mitigations include careful learning-rate engineering and moderate data replay. The existing literature focuses primarily on <em>domain</em> shifts (general&rarr;medical, code, finance), not the <em>temporal</em> shift that accumulates as the world evolves past a model's cutoff.</p>
-      </div>
-      <div class="rw-block">
-        <h4>Temporal continued pretraining</h4>
-        <p>A line of research studies temporal misalignment directly: perplexity on news and scientific text degrades systematically as the train&ndash;test year gap grows, temporal CPT recovers only a fraction of what target-period finetuning achieves, and the effective knowledge cutoffs of deployed LLMs often lag their reported cutoffs. Prior formalizations target retaining time-invariant facts, updating outdated ones, and acquiring new ones &mdash; largely holding the model fixed and varying the update procedure, leaving open how forgetting and acquisition vary across model families, post-training stages, and data quality regimes.</p>
-      </div>
-      <div class="rw-block">
-        <h4>Temporal benchmarking</h4>
-        <p>Evaluating LLMs under a shifting data distribution requires moving beyond static benchmarks like MMLU and GSM8K. Forecasting benchmarks (Autocast, Autocast++, MIRAI) draw questions from resolved forecasting tournaments and agentic event prediction, but rely on curated pools that do not continuously regenerate. Daily Oracle closes this gap by sourcing daily news and automatically generating True/False and Multiple Choice questions continuously, and shows that LLM accuracy degrades substantially over time, with degradation accelerating after the knowledge cutoff and persisting under retrieval augmentation.</p>
-      </div>
-    </div>
-  </section>
-  <!-- End related work -->
-
-
 
   <!--BibTex citation -->
   <section class="section" id="bibtex">
