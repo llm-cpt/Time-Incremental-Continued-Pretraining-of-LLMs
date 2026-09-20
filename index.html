@@ -669,36 +669,6 @@
   <!-- End related work -->
 
 
-  <!-- Limitations & statements -->
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Limitations</h2>
-      <ul class="limitations-list">
-        <li><strong>Language.</strong> Our pretraining corpus is English-only (FineWeb-Edu); whether the same recipe transfers to multilingual CPT is open.</li>
-        <li><strong>Single temporal benchmark.</strong> Our primary temporal evaluation is Daily Oracle; a multi-benchmark replication would strengthen the conclusions.</li>
-        <li><strong>Learning-rate sweep depth.</strong> Conducted in depth on Gemma-3-1B only; the divergence of QA and downstream optima may take a different shape on other families.</li>
-        <li><strong>Single CPT cycle.</strong> Whether iterative time-incremental updates compound gains or saturate over multiple rounds remains unresolved.</li>
-        <li><strong>Scale.</strong> Experiments are limited to models up to 7&ndash;8B parameters; whether the same trends hold at frontier scale is an open question.</li>
-      </ul>
-
-      <div style="max-width: 46rem; margin: 3rem auto 0;">
-        <details class="statement-accordion">
-          <summary>AI use statement</summary>
-          <div class="statement-body">In this work, we used generative AI tools to assist with writing and editing (polishing prose and LaTeX formatting) and with routine coding assistance for data-processing and plotting scripts. Generative AI was not used to generate research ideas, experimental designs, or results, and was not used to author the reported findings. All AI-assisted text and code were reviewed and verified by the authors.</div>
-        </details>
-        <details class="statement-accordion">
-          <summary>Ethics statement</summary>
-          <div class="statement-body">Our study uses only publicly available resources: FineWeb-Edu for continued pretraining, Daily Oracle for temporal evaluation, standard downstream benchmarks, and Tulu 3 for post-training. No human subjects were involved and no new data were collected. Because the CPT corpus is derived from Common Crawl, our updated models inherit whatever factual errors, biases, and objectionable content survive FineWeb-Edu's quality filtering; CPT on fresh web dumps neither introduces new safety mitigations nor removes existing ones.</div>
-        </details>
-        <details class="statement-accordion">
-          <summary>Reproducibility statement</summary>
-          <div class="statement-body">The full experimental setup &mdash; models and knowledge cutoffs, FineWeb-Edu slices and Common Crawl dump windows, learning-rate schedules, evaluation protocol, downstream tasks, and hardware &mdash; is reported in the paper, together with complete per-model, per-configuration results tables so each comparison can be checked directly. All datasets used are publicly available; training pipelines build on the official OLMo2 and HuggingFace Trainer codebases together with the Tulu 3 recipe.</div>
-        </details>
-      </div>
-    </div>
-  </section>
-  <!-- End limitations & statements -->
-
 
   <!--BibTex citation -->
   <section class="section" id="bibtex">
